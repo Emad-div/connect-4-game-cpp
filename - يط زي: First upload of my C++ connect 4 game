@@ -1,0 +1,99 @@
+#include <iostream>
+using namespace std;
+char board [6][7];
+void initializeBoard(){
+    for (int i=0; i<6; i++){
+        for (int j=0; j<7; j++){
+            board[i][j]='.';
+        }
+    }
+}
+void displayboard(){
+    for (int i=0; i<6; i++){
+        for (int j=0; j<7; j++){
+           cout << board[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout<< "0 1 2 3 4 5 6" << endl;
+}
+bool dropDisc(int col, char player) {
+    for (int i = 5; i >= 0; i--) {
+        if (board[i][col] == '.') {
+            board[i][col] = player;
+            return true;
+        }
+    }
+    return false;
+}
+bool checkWin(char player) {
+    for (int row = 0; row < 6; row++) {
+        for (int col = 0; col <= 3; col++) {
+            if (board[row][col] == player &&
+                board[row][col+1] == player &&
+                board[row][col+2] == player &&
+                board[row][col+3] == player)
+                return true;
+        }
+    }
+    for (int col = 0; col < 7; col++) {
+        for (int row = 0; row <= 2; row++) {
+            if (board[row][col] == player &&
+                board[row+1][col] == player &&
+                board[row+2][col] == player &&
+                board[row+3][col] == player)
+                return true;
+        }
+    }
+    
+    for (int row = 0; row <= 2; row++) {
+        for (int col = 0; col <= 3; col++) {
+            if (board[row][col] == player &&
+                board[row+1][col+1] == player &&
+                board[row+2][col+2] == player &&
+                board[row+3][col+3] == player)
+                return true;
+        }
+    }
+
+    for (int row = 0; row <= 2; row++) {
+        for (int col = 3; col < 7; col++) {
+            if (board[row][col] == player &&
+                board[row+1][col-1] == player &&
+                board[row+2][col-2] == player &&
+                board[row+3][col-3] == player)
+                return true;
+        }
+    }
+
+    return false;
+}
+
+int main()
+{
+    initializeBoard();
+    displayboard();
+    char currentPlayer ='x';
+    int column;
+    while (true){
+        cout << "player" << currentPlayer <<", Enter a column (0-6) :";
+        cin >> column;
+    
+    if (column < 0 || column>= 7){
+         cout << "Invalid column. Try again.\n";
+            continue;
+    }
+    if (!dropDisc(column, currentPlayer)) {
+            cout << "Column full. Try another one.\n";
+            continue;
+        }
+        displayboard();
+currentPlayer =(currentPlayer == 'x') ? 'o' : 'x';  
+    
+if (checkWin(currentPlayer)) {
+    cout << "🎉 Player " << currentPlayer << " wins! Congratulations!\n";
+    break;
+}
+}
+    return 0;
+}
